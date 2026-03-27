@@ -1,5 +1,4 @@
 # Docker-compose loads by default the variables from .env file.
-version: '3.8'
 services:
   postgrest:
     image: postgrest/postgrest
@@ -36,9 +35,9 @@ services:
   swagger:
     image: swaggerapi/swagger-ui
     ports:
-      - "8080:8080"
+      - "8088:8080"
     depends_on:
-      - postgres
+      - postgrest
     environment:
       # Connection from Swagger to PostgREST OpenAPI endpoint
       API_URL: http://localhost:3000/

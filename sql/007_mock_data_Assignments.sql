@@ -1,0 +1,17 @@
+INSERT INTO "public"."Assignments" (class_id, week_num, assignment_title, assignment_description, max_points) VALUES
+   (1, 1, 'Discussion Board Post 1', 'Introduce yourself.', 10)
+  ,(1, 1, 'Extra Credit 1', 'Attend the Live Class or write about it.', 15)
+  ,(1, 1, 'Group Project 1', 'Update your plan documentation.', 125)
+  ,(1, 2, 'Discussion Board Post 2', 'Talk about week 2.', 85)
+  ,(1, 2, 'Extra Credit 2', 'Attend the Live Class or write about it.', 15)
+  ,(1, 2, 'Group Project 2', 'Submit your work from Sprint 1.', 125)
+  ,(1, 3, 'Discussion Board Post 3', 'Tal;k about week 3.', 85)
+  ,(1, 3, 'Extra Credit 3', 'Attend the Live Class or write about it.', 15)
+  ,(1, 3, 'Group Project 3', 'Update your plan documentation.', 125)
+  ,(1, 4, 'Discussion Board Post 4', 'Talk about week 4.', 85)
+  ,(1, 4, 'Extra Credit 4', 'Attend the Live Class or write about it.', 15)
+  ,(1, 4, 'Group Project 4', 'Submit your work from Sprint 2', 125)
+  ,(1, 5, 'Discussion Board Post 5', 'Talk about your experiences with the class.', 85)
+  ,(1, 5, 'Extra Credit 5', 'Attend the Live Class or write about it.', 15)
+  ,(1, 5, 'Group Project 5', 'Present your group project.', 125)
+;
