@@ -1,5 +1,19 @@
 # Docker-compose loads by default the variables from .env file.
 services:
+  postgres:
+    image: postgres:14.1-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - "./config/timezone:/etc/timezone:ro"
+      - pgdata_volume:/var/lib/postgresql/data
+      # Script with initial data to be executed just in the first boot
+      - ./sql/:/docker-entrypoint-initdb.d/
+
   postgrest:
     image: postgrest/postgrest
     ports:
@@ -18,20 +32,6 @@ services:
     volumes:
       - "./config/timezone:/etc/timezone:ro"
   
-  postgres:
-    image: postgres:14.1-alpine
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - "./config/timezone:/etc/timezone:ro"
-      - pgdata_volume:/var/lib/postgresql/data
-      # Script with initial data to be executed just in the first boot
-      - ./sql/:/docker-entrypoint-initdb.d/
-
   swagger:
     image: swaggerapi/swagger-ui
     ports:
@@ -42,7 +42,40 @@ services:
       # Connection from Swagger to PostgREST OpenAPI endpoint
       API_URL: http://localhost:3000/
     
-
+  prod:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8070:80"
+    depends_on:
+      - postgrest
+    environment:
+      - NODE_ENV=production
+ 
+  dev:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:3000"
+    depends_on:
+      - postgrest
+    environment:
+      - NODE_ENV=development
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+          target: /app/package.json
+        - action: rebuild
+          path: ./vite.config.ts
+          target: /app/vite.config.ts
 
 volumes:
   pgdata_volume:
