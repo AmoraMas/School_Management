@@ -4,10 +4,23 @@ CREATE TABLE "public"."Students" (
   "last_name" varchar(30) NOT NULL,
   "date_of_birth" date NOT NULL,
   "email" varchar(50) NOT NULL,
-  "phone" varchar(13) NOT NULL,
-  "address" text NOT NULL,
+  "phone" varchar(20) NOT NULL,
+  "street" varchar(50) NOT NULL,
+  "city" varchar(20) NOT NULL,
+  "state" char(2) NOT NULL,
+  "country" varchar(5) NOT NULL,
+  "zip" varchar(10) NOT NULL,
   "enrollment_date" date NOT NULL,
-  "student_status" varchar(10) DEFAULT 'active' NOT NULL
+  "student_status" varchar(10) DEFAULT 'active' NOT NULL,
+  CHECK (
+        zip ~ '^[0-9]{5}$'
+        OR zip ~ '^[0-9]{5}-[0-9]{4}$'
+    ),
+  CHECK (
+        phone ~ '^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$'
+        OR phone ~ '^[0-9]{3}-[0-9]{3}-[0-9]{4}$'
+        OR phone ~ '^[0-9]{10}$'
+    )
 );
 
 CREATE TABLE "public"."Teachers" (
@@ -16,11 +29,24 @@ CREATE TABLE "public"."Teachers" (
   "last_name" varchar(30) NOT NULL,
   "date_of_birth" date NOT NULL,
   "email" varchar(50) NOT NULL,
-  "phone" varchar(13) NOT NULL,
+  "phone" varchar(20) NOT NULL,
   "hire_date" date DEFAULT CURRENT_DATE NOT NULL,
   "department" varchar(20) NOT NULL,
-  "address" text NOT NULL,
-  "teacher_status" varchar(10) DEFAULT 'active' NOT NULL
+  "street" varchar(50) NOT NULL,
+  "city" varchar(20) NOT NULL,
+  "state" char(2) NOT NULL,
+  "country" varchar(5) NOT NULL,
+  "zip" varchar(10) NOT NULL,
+  "teacher_status" varchar(10) DEFAULT 'active' NOT NULL,
+  CHECK (
+        zip ~ '^[0-9]{5}$'
+        OR zip ~ '^[0-9]{5}-[0-9]{4}$'
+    ),
+  CHECK (
+        phone ~ '^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$'
+        OR phone ~ '^[0-9]{3}-[0-9]{3}-[0-9]{4}$'
+        OR phone ~ '^[0-9]{10}$'
+    )
 );
 
 CREATE TABLE "public"."Terms" (

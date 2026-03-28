@@ -17,7 +17,7 @@ services:
   postgrest:
     image: postgrest/postgrest
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       # String DB connection used by PostgREST to connect to postgres
       PGRST_DB_URI: ${PGRST_DB_URI}
@@ -40,7 +40,7 @@ services:
       - postgrest
     environment:
       # Connection from Swagger to PostgREST OpenAPI endpoint
-      API_URL: http://localhost:3000/
+      API_URL: http://localhost:3001/
     
   prod:
     build:
@@ -58,10 +58,11 @@ services:
       context: ./app
       dockerfile: Dockerfile.dev
     ports:
-      - "8080:3000"
+      - "3000:3000"
     depends_on:
       - postgrest
     environment:
+      - API="http://localhost:3001"
       - NODE_ENV=development
     develop:
       watch:
