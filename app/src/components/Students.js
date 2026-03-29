@@ -3,46 +3,40 @@ import { useEffect } from "react";
 
 import TableHead from "./Table-Head";
 import TableBody from "./Table-Body";
+import Form from "./Form";
+import FastList from "./Form-FastList";
 
 function Students() {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const columns = [
+  const [student, setStudent] = useState([]);
+
+  const column_top = [
+    { label: "Student ID", accessor: "student_id" },
+    { label: "First Name", accessor: "first_name" },
+    { label: "Last Name", accessor: "last_name" },
+    { label: "Email", accessor: "email" },
+    { label: "Enrollment Date", accessor: "enrollment_date" },
+    { label: "Status", accessor: "student_status" }
+  ]
+
+  const column_bot = [
     { label: "Student ID", accessor: "student_id" },
     { label: "First Name", accessor: "first_name" },
     { label: "Last Name", accessor: "last_name" },
     { label: "Date Of Birth", accessor: "date_of_birth" },
     { label: "Email", accessor: "email" },
     { label: "Phone", accessor: "phone" },
-    { label: "Address", accessor: "address" },
+    { label: "Street", accessor: "street" },
+    { label: "City", accessor: "city" },
+    { label: "State", accessor: "state" },
+    { label: "Country", accessor: "country" },
+    { label: "Zip", accessor: "zip" },
     { label: "Enrollment Date", accessor: "enrollment_date" },
     { label: "Status", accessor: "student_status" }
   ];
-  const tempdata = [
-    {
-        "student_id":	1,
-        "first_name":	"Lyiondra",
-        "last_name":	"Bradley",
-        "date_of_birth":	"2000-01-01",
-        "email":	"first.last@nowhere.com",
-        "phone":	"(123)456-7890",
-        "address":	"111 NoWhere Street - Nowhere AL 00000",
-        "enrollment_date":	"2023-01-01",
-        "student_status":	"active"
-    }, {
-        "student_id":	2,
-        "first_name":	"Alyssa",
-        "last_name":	"Brown",
-        "date_of_birth":	"2000-01-01",
-        "email":	"first.last@nowhere.com",
-        "phone":	"(123)456-7890",
-        "address":	"111 NoWhere Street - Nowhere AL 00000",
-        "enrollment_date":	"2023-01-01",
-        "student_status":	"active"
-    }
-  ]
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -55,6 +49,7 @@ function Students() {
         }
         const fetchData = await response.json();
         setData(fetchData);
+        setStudent(fetchData[0])
         setError(null);
       } catch (err) {
         setError(err.message);
@@ -68,14 +63,22 @@ function Students() {
   }, []);
 
     return (
-        <div className="Table">
-            <table className="App-Table">
-                <caption>
-                    List of Students
-                </caption>
-                <TableHead columns={columns} />
-                <TableBody columns={columns} data={data} />
-            </table>
+        <div>
+            <div className="App-Table">
+                <div className="wrapper">
+                    <table className="Table">
+                        <caption>
+                            List of Students
+                        </caption>
+                        <TableHead columns={column_top} />
+                        <TableBody columns={column_top} data={data} />
+                    </table>
+                </div>
+            </div>
+            <div className="App-Form-Outer">
+                <Form formData={student} />
+                <Form formData={student} />
+            </div>
         </div>
     )
 }

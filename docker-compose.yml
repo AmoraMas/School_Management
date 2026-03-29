@@ -62,7 +62,6 @@ services:
     depends_on:
       - postgrest
     environment:
-      - API="http://localhost:3001"
       - NODE_ENV=development
     develop:
       watch:

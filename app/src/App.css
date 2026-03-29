@@ -9,13 +9,15 @@
   max-width: "1300px";
   margin-left: "auto";
   margin-right: "auto";
-  position: "relative"
+  position: "relative";
 }
 
 .App-Body {
   color: black;
-  background-color: aqua;
   margin: auto;
+  flex: "wrap";
+  padding-top: 10vh;
+  min-height: 79vh;
 }
 
 .App-logo {
@@ -25,7 +27,52 @@
 
 .App-Table {
   width: 80%;
-  height: 80%;
+  height: 40vh;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: scroll;
+  box-shadow: 8px 8px 10px 0 rgba(120, 138, 229, 0.2);
+}
+
+.App-Form-Outer {
+  flex: wrap;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  width: 80%;
+}
+
+.App-Form {
+  width: 48%;
+  height: 40vh;
+  margin-left: 1%;
+  margin-right: 1%;
+  overflow: scroll;
+  box-shadow: 8px 8px 10px 0 rgba(120, 138, 229, 0.2);
+  display: inline-block;
+}
+
+.Table {
+  --color: #d0d0f5;
+}
+.table.caption {
+  font-weight: bold;
+}
+
+thead, tfoot {
+  background: var(--color);
+  border-block-end: 2px solid;
+  text-align: center;
+}
+
+tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--color), transparent 60%);
+}
+
+th,
+td {
+	border: lightgrey;
+	padding: 0.25rem 0.75rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -40,6 +87,7 @@
   height: 10vh;
   font-size: calc(10px + 2vmin);
   color: white;
+  position: fixed;
 }
 
 .Header-Left{
@@ -56,7 +104,6 @@
 
 .App-Footer {
   background-color: #282c34;
-  position: fixed;
   bottom: 0;
   font-size: 10px;
   color: white;

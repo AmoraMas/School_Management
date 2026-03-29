@@ -8,7 +8,7 @@ CREATE TABLE "public"."Students" (
   "street" varchar(50) NOT NULL,
   "city" varchar(20) NOT NULL,
   "state" char(2) NOT NULL,
-  "country" varchar(5) NOT NULL,
+  "country" varchar(15) NOT NULL,
   "zip" varchar(10) NOT NULL,
   "enrollment_date" date NOT NULL,
   "student_status" varchar(10) DEFAULT 'active' NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE "public"."Teachers" (
   "street" varchar(50) NOT NULL,
   "city" varchar(20) NOT NULL,
   "state" char(2) NOT NULL,
-  "country" varchar(5) NOT NULL,
+  "country" varchar(15) NOT NULL,
   "zip" varchar(10) NOT NULL,
   "teacher_status" varchar(10) DEFAULT 'active' NOT NULL,
   CHECK (
@@ -131,10 +131,10 @@ CREATE TABLE "public"."Roles" (
 );
 
 ALTER TABLE "public"."Students" ADD CONSTRAINT student_status_values
-  CHECK ("student_status" IN ('active', 'inactive', 'graduated'));
+  CHECK ("student_status" IN ('active', 'inactive', 'suspended', 'graduated'));
 
 ALTER TABLE "public"."Teachers" ADD CONSTRAINT student_status_values
-  CHECK ("teacher_status" IN ('active', 'inactive', 'graduated'));
+  CHECK ("teacher_status" IN ('active', 'inactive', 'suspended', 'retired', 'fired'));
 
 ALTER TABLE "public"."Classes" ADD CONSTRAINT class_status_values
   CHECK ("class_status" IN ('active', 'inactive', 'dead'));
