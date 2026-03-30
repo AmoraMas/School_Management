@@ -8,8 +8,8 @@ Steps to reproduce...
 4. Clone this git repository
 
     4.1. cd /path/to/directory/
-    
-    4.2. git clone <git project address>
+
+    4.2. git clone [git project address]
 5. Add your .env files
 
    5.1. .env in root directory
