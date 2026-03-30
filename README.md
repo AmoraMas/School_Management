@@ -48,4 +48,6 @@ Steps to reproduce...
     * VITE_API_URL=http://localhost:3001
     * REACT_APP_API=http://localhost:3001
 
-6. run docker compose up
+6. From the project root directory
+
+    6.1. run docker compose up
