@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { useEffect } from "react";
 
-import TableHead from "./Table-Head";
-import TableBody from "./Table-Body";
-import Form from "./Form";
-import FastList from "./Form-FastList";
+import Table from "./Table";
+import Form_Edit from "./Form-Edit";
+import Form_Show from "./Form-Show";
 
 function Students() {
 
-  const [data, setData] = useState([]);
+  const [Students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [student, setStudent] = useState([]);
+  const [studentID, setStudentID] = useState(0);
 
-  const column_top = [
+  const table_headers = [
     { label: "Student ID", accessor: "student_id" },
     { label: "First Name", accessor: "first_name" },
     { label: "Last Name", accessor: "last_name" },
@@ -21,22 +21,6 @@ function Students() {
     { label: "Enrollment Date", accessor: "enrollment_date" },
     { label: "Status", accessor: "student_status" }
   ]
-
-  const column_bot = [
-    { label: "Student ID", accessor: "student_id" },
-    { label: "First Name", accessor: "first_name" },
-    { label: "Last Name", accessor: "last_name" },
-    { label: "Date Of Birth", accessor: "date_of_birth" },
-    { label: "Email", accessor: "email" },
-    { label: "Phone", accessor: "phone" },
-    { label: "Street", accessor: "street" },
-    { label: "City", accessor: "city" },
-    { label: "State", accessor: "state" },
-    { label: "Country", accessor: "country" },
-    { label: "Zip", accessor: "zip" },
-    { label: "Enrollment Date", accessor: "enrollment_date" },
-    { label: "Status", accessor: "student_status" }
-  ];
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -48,12 +32,11 @@ function Students() {
           throw new Error(`HTTP error: Status ${response.status}`);
         }
         const fetchData = await response.json();
-        setData(fetchData);
-        setStudent(fetchData[0])
+        setStudents(fetchData);
         setError(null);
       } catch (err) {
         setError(err.message);
-        setData([]);
+        setStudents([]);
       } finally {
         setLoading(false);
       }
@@ -61,6 +44,33 @@ function Students() {
 
     fetchStudentData();
   }, []);
+
+    function diffObjects(original, updated) {
+        const changed = {};
+        for (const key in updated) {
+            if (updated[key] !== original[key]) {
+            changed[key] = updated[key];
+            }
+        }
+        return changed;
+    }
+
+    const handleTableSelect = (id) => {
+        setStudent(Students.find(s => s.student_id === id))
+        setStudentID(id)
+    }
+
+    const handleFormSave = (value) => {
+        const update = diffObjects(value, Students.find(s => s.student_id === value.id))
+        fetch('${process.env.REACT_APP_API}/Students?student_id=${value.id}', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'appliation/json'
+            },
+            body: JSON.stringify(update)
+        })
+    };
 
     return (
         <div>
@@ -70,14 +80,20 @@ function Students() {
                         <caption>
                             List of Students
                         </caption>
-                        <TableHead columns={column_top} />
-                        <TableBody columns={column_top} data={data} />
+                        <Table columns={table_headers} data={Students} idField="student_id" onSelect={handleTableSelect}/>
                     </table>
                 </div>
             </div>
             <div className="App-Form-Outer">
-                <Form formData={student} />
-                <Form formData={student} />
+                {!student ? (
+                    <div>...No Student Selected...</div>
+                ) : (
+                    <div>
+                        <Form_Show rawData={student} />
+                        <Form_Edit rawData={student} onSave={handleFormSave} />
+                    </div>
+                )
+            }
             </div>
         </div>
     )

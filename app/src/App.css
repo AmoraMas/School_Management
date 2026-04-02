@@ -52,11 +52,36 @@
   display: inline-block;
 }
 
+
+.App-Form-Line {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* label | value */
+  align-items: center;
+}
+
+.App-Form-Label {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.App-Form-Input {
+  width: 80%;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #f9f9f9;
+}
+
 .Table {
   --color: #d0d0f5;
 }
+
 .table.caption {
   font-weight: bold;
+}
+
+.Table-Row-Selected {
+  background: #00d0f5 !important;
 }
 
 thead, tfoot {
