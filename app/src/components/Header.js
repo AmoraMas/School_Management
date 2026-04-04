@@ -42,6 +42,17 @@ function Header({ handlePage }) {
                     >
                     Teachers
                 </a>
+                {/*
+                <a  className="link-white"
+                    href="#"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        handlePage("billings");
+                    }}
+                    >
+                    Billing
+                </a>
+                */}
                 <a  className="link-white"
                     href="#"
                     onClick={(e) => {

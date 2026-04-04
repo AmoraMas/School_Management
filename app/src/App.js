@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import Students from "./components/Students";
 import Teachers from "./components/Teachers";
 import Courses from "./components/Courses";
+import Billings from "./components/Billings";
 import './App.css';
 
 function App() {
@@ -30,6 +31,8 @@ function App() {
             <Teachers />
           ) :  pageView === "classes" ? (
             <Courses />
+          ) :  pageView === "billings" ? (
+            <Billings />
           ) : (
             <caption>Select an Action</caption>
           )}
