@@ -59,7 +59,7 @@ function Table({ data, columns, idField, onSelect }) {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <table className="table-auto border-collapse w-full">
+      <table className="App-Table">
         <thead>
           <tr>
             {columns.map(({ accessor, label }) => (
@@ -82,7 +82,7 @@ function Table({ data, columns, idField, onSelect }) {
           {sortedData.map((row) => (
             <tr
               key={row[idField]}
-              className={row[idField] === selectedId ? "Table-Row-Selected" : ""}
+              className={row[idField] === selectedId ? "Selected" : ""}
             >
               {columns.map(({ accessor }) => (
                 <td key={accessor} className="border p-2">

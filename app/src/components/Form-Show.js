@@ -1,18 +1,22 @@
 import { useEffect } from "react";
 import { useState } from "react";
 
-function Form_Show({ rawData }) {
+function Form_Show({ title, rawData }) {
   const [fields, setFields] = useState([]);
 
   useEffect(() => {
     if (!rawData) return;
 
     function detectType(key, value) {
-        if (typeof value === "number") return "number";
-        if (typeof value === "string") {
+        if (key.includes("date")) return "date";
+        else if (key.includes("email")) return "email";
+        else if (key.includes("phone")) return "tel";
+        else if (key.includes("description")) return "textarea";
+        else if (typeof value === "number") return "number";
+        else if (typeof value === "string") {
             if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return "date";
-            if (value.includes("@")) return "email";
-            if (/^\d{7,15}$/.test(value)) return "tel";
+            else if (value.includes("@")) return "email";
+            else if (/^\d{7,15}$/.test(value)) return "tel";
         }
         return "text";
     }
@@ -30,7 +34,7 @@ function Form_Show({ rawData }) {
 
   return (
     <div className="App-Form">
-      <h1>Unedited Values</h1>
+      <caption>{fields.length > 0 ? title : "None Selected"}</caption>
 
       {fields.map(({ key, value, type }) => (
         <div>
@@ -38,13 +42,21 @@ function Form_Show({ rawData }) {
             <span className="App-Form-Label">
                 {key.replace(/_/g, " ")}
             </span>
-
-            <input
-                type={type}
-                value={value ?? ""}
-                readOnly
-                className="App-Form-Input"
-            />
+            {type === "textarea" ? (
+                <textarea
+                    type={type}
+                    className="App-Form-Input"
+                    value={value ?? ""}
+                    readOnly
+                />
+            ) : (
+              <input
+                  type={type}
+                  value={value ?? ""}
+                  readOnly
+                  className="App-Form-Input"
+              />
+              )}
             </label>
             <br />
         </div>

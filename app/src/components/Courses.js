@@ -5,55 +5,54 @@ import Table from "./Table";
 import Form_Edit from "./Form-Edit";
 import Form_Show from "./Form-Show";
 
-function Students() {
+function Courses() {
 
-    const [Students, setStudents] = useState([]);
+    const [Courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [student, setStudent] = useState([]);
+    const [course, setCourse] = useState([]);
     const [formState, setFormState] = useState("view");
-    const [emptyStudent, setEmptyStudent] = useState();
+    const [emptyCourse, setEmptyCourse] = useState();
 
     const table_headers = [
-        { label: "Student ID", accessor: "student_id" },
-        { label: "First Name", accessor: "first_name" },
-        { label: "Last Name", accessor: "last_name" },
-        { label: "Enrollment Date", accessor: "enrollment_date" },
-        { label: "Status", accessor: "student_status" }
+        { label: "Course ID", accessor: "class_id" },
+        { label: "Code", accessor: "class_code" },
+        { label: "Title", accessor: "class_title" },
+        { label: "Status", accessor: "class_status" }
     ]
 
     useEffect(() =>{
-        if (Students.length === 0) return;
-        setEmptyStudent(
+        if (Courses.length === 0) return;
+        setEmptyCourse(
             Object.fromEntries(
-                Object.keys(Students[0])
-                .filter(key => key !== "student_id") 
+                Object.keys(Courses[0])
+                .filter(key => key !== "class_id") 
                 .map(key => [key, ""])
             )
         );
-    }, [Students])
+    }, [Courses])
 
     useEffect(() => {
-        const fetchStudentData = async () => {
+        const fetchCourseData = async () => {
         try {
             const response = await fetch(
-            `${process.env.REACT_APP_API}/Students`
+            `${process.env.REACT_APP_API}/Classes`
             );
             if (!response.ok) {
             throw new Error(`HTTP error: Status ${response.status}`);
             }
             const fetchData = await response.json();
-            setStudents(fetchData);
+            setCourses(fetchData);
             setError(null);
         } catch (err) {
             setError(err.message);
-            setStudents([]);
+            setCourses([]);
         } finally {
             setLoading(false);
         }
         };
 
-        fetchStudentData();
+        fetchCourseData();
     }, []);
 
     function diffObjects(original, updated) {
@@ -67,12 +66,12 @@ function Students() {
     }
 
     const handleTableSelect = (id) => {
-        setStudent(Students.find(s => s.student_id === id));
+        setCourse(Courses.find(s => s.class_id === id));
     }
 
     const handleFormAdd = async (newData) => {
         console.log("newData:  ", newData);
-        const response = await fetch(`${process.env.REACT_APP_API}/Students`, {
+        const response = await fetch(`${process.env.REACT_APP_API}/Classes`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -89,18 +88,18 @@ function Students() {
         };
         // PostgREST returns an array of inserted rows
         const inserted = await response.json();
-        const newStudent = inserted[0];
+        const newCourse = inserted[0];
 
-        // Add to Students state
-        setStudents(prev => [...prev, newStudent]);
+        // Add to Courses state
+        setCourses(prev => [...prev, newCourse]);
 
-        return newStudent;
+        return newCourse;
     }
 
     const handleFormEdit = async (updatedData) => {
-        const id = updatedData.student_id;
-        const update = diffObjects(Students.find(s => s.student_id === id), updatedData);
-        const response = await fetch(`${process.env.REACT_APP_API}/Students?student_id=eq.${id}`, {
+        const id = updatedData.class_id;
+        const update = diffObjects(Courses.find(s => s.class_id === id), updatedData);
+        const response = await fetch(`${process.env.REACT_APP_API}/Classes?class_id=eq.${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -114,9 +113,9 @@ function Students() {
             console.error("PATCH error:", text);
             throw new Error("Failed to update");
         };
-        const index = Students.findIndex(s => s.student_id === id);
+        const index = Courses.findIndex(s => s.class_id === id);
         if (index != -1) {
-            setStudents(prev => {
+            setCourses(prev => {
                 const copy = [...prev];     // Shallow copy
                 copy[index] = updatedData;  // replace only the one entry
                 return copy;                // return the new array
@@ -131,39 +130,39 @@ function Students() {
 
                     <div className="Table">
                         <h1>
-                            Students
+                            Courses
                         </h1>
                         <button
                             className={formState === "add" ? "Selected" : ""}
                             onClick={() => setFormState("add")}
                         >
-                            Add Student
+                            Add Course
                         </button>
                         <button
                             className={formState === "edit" ? "Selected" : ""}
                             onClick={() => setFormState("edit")}
                         >
-                            Edit Student
+                            Edit Course
                         </button>
                         <button
                             className={formState === "view" ? "Selected" : ""}
                             onClick={() => setFormState("view")}
                         >
-                            View Student
+                            View Course
                         </button>
-                        <Table columns={table_headers} data={Students} idField="student_id" onSelect={handleTableSelect}/>
+                        <Table columns={table_headers} data={Courses} idField="class_id" onSelect={handleTableSelect}/>
                     </div>
                 </div>
 
             <div className="App-Form-Outer">
-                {!student ? (
-                    <h1>...No Student Selected...</h1>
+                {!course ? (
+                    <h1>...No Course Selected...</h1>
                 ) :  formState === "add" ? (
-                    <Form_Edit title="Add Student" rawData={emptyStudent} onSave={handleFormAdd} />
+                    <Form_Edit title="Add Course" rawData={emptyCourse} onSave={handleFormAdd} />
                 ) : formState === "edit" ? (
-                    <Form_Edit title="Edit Student" rawData={student} onSave={handleFormEdit} />
+                    <Form_Edit title="Edit Course" rawData={course} onSave={handleFormEdit} />
                 ) : formState === "view" ? (
-                    <Form_Show title="View Student" rawData={student} />
+                    <Form_Show title="View Course" rawData={course} />
                 ) : (
                     <h1>Select an Action</h1>
                 )}
@@ -172,4 +171,4 @@ function Students() {
     )
 }
 
-export default Students;
+export default Courses;
