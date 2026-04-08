@@ -156,12 +156,16 @@ textarea {
   grid-template-columns: 1fr 2fr;
 }
 
-.Header-Right {
+.Header-Rights {
   float: right;
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
   grid-template-rows: auto auto;         /* 2 rows */
   gap: 10px;
+}
+.Header-Right {
+  float: right;
+  
 }
 
 .item1 {

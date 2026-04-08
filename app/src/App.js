@@ -7,11 +7,13 @@ import Students from "./components/Students";
 import Teachers from "./components/Teachers";
 import Courses from "./components/Courses";
 import Billings from "./components/Billings";
+import Terms from "./components/Terms";
+import Assignments from "./components/Assignments";
 import './App.css';
 
 function App() {
 
-    const [pageView, setPageView] = useState("classes");
+    const [pageView, setPageView] = useState("courses");
 
     const handlePageChange = (page) => {
         setPageView(page);
@@ -25,14 +27,18 @@ function App() {
         <div className="App-Body">
           {!pageView ? (
             <caption>...No Page Selected...</caption>
-          ) :  pageView === "students" ? (
+          ) : pageView === "students" ? (
             <Students />
-          ) :  pageView === "teachers" ? (
+          ) : pageView === "teachers" ? (
             <Teachers />
-          ) :  pageView === "classes" ? (
+          ) : pageView === "courses" ? (
             <Courses />
-          ) :  pageView === "billings" ? (
+          ) : pageView === "billings" ? (
             <Billings />
+          ) : pageView === "terms" ? (
+            <Terms />
+          ) : pageView === "assignments" ? (
+            <Assignments />
           ) : (
             <caption>Select an Action</caption>
           )}

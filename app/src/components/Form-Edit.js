@@ -33,6 +33,7 @@ function Form_Edit({ title, rawData, onSave}) {
         else if (key.includes("email")) return "email";
         else if (key.includes("phone")) return "tel";
         else if (key.includes("description")) return "textarea";
+        else if (typeof value === "boolean") return "checkbox";
         else if (typeof value === "number") return "number";
         else if (typeof value === "string") {
             if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return "date";
@@ -106,6 +107,13 @@ function Form_Edit({ title, rawData, onSave}) {
                             className="App-Form-Input"
                             value={value ?? ""}
                             onChange={(e) => onChange(key, e.target.value)}
+                        />
+                    ) : type === "checkbox" ? (
+                        <input
+                            type={type}
+                            className="App-Form-Input"
+                            checked={value}
+                            onChange={(e) => onChange(key, e.target.checked)}
                         />
                     ): (
                         <input

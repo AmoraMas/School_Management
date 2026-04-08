@@ -1,4 +1,4 @@
-INSERT INTO "public"."Assignments" (class_id, week_num, assignment_title, assignment_description, max_points) VALUES
+INSERT INTO "public"."Assignments" (course_id, week_num, assignment_title, assignment_description, max_points) VALUES
    (1, 1, 'Discussion Board Post 1', 'Introduce yourself.', 10)
   ,(1, 1, 'Extra Credit 1', 'Attend the Live Class or write about it.', 15)
   ,(1, 1, 'Group Project 1', 'Update your plan documentation.', 125)

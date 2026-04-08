@@ -12,6 +12,7 @@ function Form_Show({ title, rawData }) {
         else if (key.includes("email")) return "email";
         else if (key.includes("phone")) return "tel";
         else if (key.includes("description")) return "textarea";
+        else if (typeof value === "boolean") return "checkbox";
         else if (typeof value === "number") return "number";
         else if (typeof value === "string") {
             if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return "date";
@@ -43,12 +44,19 @@ function Form_Show({ title, rawData }) {
                 {key.replace(/_/g, " ")}
             </span>
             {type === "textarea" ? (
-                <textarea
-                    type={type}
-                    className="App-Form-Input"
-                    value={value ?? ""}
-                    readOnly
-                />
+              <textarea
+                type={type}
+                className="App-Form-Input"
+                value={value ?? ""}
+                readOnly
+              />
+            ) : type === "checkbox" ? (
+              <input
+                type={type}
+                className="App-Form-Input"
+                checked={value}
+                readOnly
+              />
             ) : (
               <input
                   type={type}

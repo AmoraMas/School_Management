@@ -1,3 +1,4 @@
+import HeaderNav from "./HeaderNav"
 import logo from '../images/logo.svg';
 
 function Header({ handlePage }) {
@@ -11,57 +12,9 @@ function Header({ handlePage }) {
                 <br />
                 UNiversity
             </div>
-
-
-            <div className="Header-Right">
+                <div className="Header-Right">
                 <div className="item1">ACCOUNT</div>
-                <a  className="link-white"
-                    href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handlePage("classes");
-                    }}
-                    >
-                    Classes
-                </a>
-                <a  className="link-white"
-                    href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handlePage("students");
-                    }}
-                    >
-                    Students
-                </a>
-                <a  className="link-white"
-                    href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handlePage("teachers");
-                    }}
-                    >
-                    Teachers
-                </a>
-                {/*
-                <a  className="link-white"
-                    href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handlePage("billings");
-                    }}
-                    >
-                    Billing
-                </a>
-                */}
-                <a  className="link-white"
-                    href="#"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handlePage("about");
-                    }}
-                    >
-                    About
-                </a>
+                <HeaderNav onNavClick={handlePage}/>
             </div>
         </div>
     )
