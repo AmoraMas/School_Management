@@ -115,6 +115,10 @@ textarea {
   field-sizing: content;
 }
 
+button {
+  margin-right: 10px;
+}
+
 .link-white {
   font-size: 1.8rem;
   color: white;

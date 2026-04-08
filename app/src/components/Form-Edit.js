@@ -76,7 +76,7 @@ function Form_Edit({ title, rawData, onSave}) {
                 >
                     Revert
                 </button>
-                <caption>{fields.length > 0 ? title : "None Selected"}</caption>
+                <h1>{fields.length > 0 ? title : "None Selected"}</h1>
                 <button
                 className="btn btn-primary"
                 onClick={() => onSave(data)}

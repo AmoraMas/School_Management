@@ -35,22 +35,22 @@ function Students() {
 
     useEffect(() => {
         const fetchStudentData = async () => {
-        try {
-            const response = await fetch(
-            `${process.env.REACT_APP_API}/Students`
-            );
-            if (!response.ok) {
-            throw new Error(`HTTP error: Status ${response.status}`);
+            try {
+                const response = await fetch(
+                `${process.env.REACT_APP_API}/Students`
+                );
+                if (!response.ok) {
+                throw new Error(`HTTP error: Status ${response.status}`);
+                }
+                const fetchData = await response.json();
+                setStudents(fetchData);
+                setError(null);
+            } catch (err) {
+                setError(err.message);
+                setStudents([]);
+            } finally {
+                setLoading(false);
             }
-            const fetchData = await response.json();
-            setStudents(fetchData);
-            setError(null);
-        } catch (err) {
-            setError(err.message);
-            setStudents([]);
-        } finally {
-            setLoading(false);
-        }
         };
 
         fetchStudentData();
@@ -128,32 +128,31 @@ function Students() {
     return (
         <div>
             <div className="App-Table">
-
-                    <div className="Table">
-                        <h1>
-                            Students
-                        </h1>
-                        <button
-                            className={formState === "add" ? "Selected" : ""}
-                            onClick={() => setFormState("add")}
-                        >
-                            Add Student
-                        </button>
-                        <button
-                            className={formState === "edit" ? "Selected" : ""}
-                            onClick={() => setFormState("edit")}
-                        >
-                            Edit Student
-                        </button>
-                        <button
-                            className={formState === "view" ? "Selected" : ""}
-                            onClick={() => setFormState("view")}
-                        >
-                            View Student
-                        </button>
-                        <Table columns={table_headers} data={Students} idField="student_id" onSelect={handleTableSelect}/>
-                    </div>
+                <div className="Table">
+                    <h1>
+                        Students
+                    </h1>
+                    <button
+                        className={formState === "add" ? "Selected" : ""}
+                        onClick={() => setFormState("add")}
+                    >
+                        Add Student
+                    </button>
+                    <button
+                        className={formState === "edit" ? "Selected" : ""}
+                        onClick={() => setFormState("edit")}
+                    >
+                        Edit Student
+                    </button>
+                    <button
+                        className={formState === "view" ? "Selected" : ""}
+                        onClick={() => setFormState("view")}
+                    >
+                        View Student
+                    </button>
+                    <Table columns={table_headers} data={Students} idField="student_id" onSelect={handleTableSelect}/>
                 </div>
+            </div>
 
             <div className="App-Form-Outer">
                 {!student ? (

@@ -35,7 +35,7 @@ function Form_Show({ title, rawData }) {
 
   return (
     <div className="App-Form">
-      <caption>{fields.length > 0 ? title : "None Selected"}</caption>
+      <h1>{fields.length > 0 ? title : "None Selected"}</h1>
 
       {fields.map(({ key, value, type }) => (
         <div>

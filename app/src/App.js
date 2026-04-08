@@ -9,6 +9,7 @@ import Courses from "./components/Courses";
 import Billings from "./components/Billings";
 import Terms from "./components/Terms";
 import Assignments from "./components/Assignments";
+import Connect_Tables from "./components/Connect-Tables";
 import './App.css';
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
             <Terms />
           ) : pageView === "assignments" ? (
             <Assignments />
+          ) : pageView === "courses2term" ? (
+            <Connect_Tables one="Terms" many="Courses" one_id="term_id" many_id="course_id" />
           ) : (
             <caption>Select an Action</caption>
           )}
