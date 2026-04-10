@@ -78,6 +78,7 @@ CREATE TABLE "public"."Term_Courses" (
   "term_course_id" serial PRIMARY KEY,
   "teacher_id" integer,
   "term_id" integer NOT NULL,
+  "course_id" integer NOT NULL,
   "num_students" integer DEFAULT 0
 );
 
@@ -85,7 +86,7 @@ CREATE TABLE "public"."Student_Course_Enrollments" (
   "enrollment_id" serial PRIMARY KEY,
   "student_id" integer NOT NULL,
   "term_course_id" integer NOT NULL,
-  "enrollment_date" date NOT NULL,
+  "enrollment_date" date DEFAULT CURRENT_DATE,
   "grade_num" integer DEFAULT 0,
   "grade_Let" varchar(2)
 );
@@ -156,6 +157,11 @@ ALTER TABLE "public"."Term_Courses" ADD CONSTRAINT term_courses_teacher_id_fkey 
 
 ALTER TABLE "public"."Term_Courses" ADD CONSTRAINT term_clasess_term_id_fkey FOREIGN KEY (term_id)
   REFERENCES "public"."Terms" (term_id) MATCH SIMPLE
+  ON UPDATE NO ACTION
+  ON DELETE No ACTION;
+
+ALTER TABLE "public"."Term_Courses" ADD CONSTRAINT term_clasess_course_id_fkey FOREIGN KEY (course_id)
+  REFERENCES "public"."Courses" (course_id) MATCH SIMPLE
   ON UPDATE NO ACTION
   ON DELETE No ACTION;
 

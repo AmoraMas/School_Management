@@ -126,7 +126,7 @@ function Terms() {
 
     return (
         <div>
-            <div className="App-Table">
+            <div className="App-Table-Many">
 
                     <div className="Table">
                         <h1>

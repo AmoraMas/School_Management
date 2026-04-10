@@ -26,8 +26,14 @@
 }
 
 .App-Table {
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 8px 8px 10px 0 rgba(120, 138, 229, 0.2);
+}
+
+.App-Table-Many {
   width: 80%;
-  height: 40vh;
+  max-height: 40vh;
   margin-left: auto;
   margin-right: auto;
   overflow: scroll;
