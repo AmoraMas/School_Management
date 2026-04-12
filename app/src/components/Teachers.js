@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { TABLE_HEADERS } from "./table-headers";
 
 import Table from "./Table";
 import Form_Edit from "./Form-Edit";
@@ -14,13 +15,7 @@ function Teachers() {
     const [formState, setFormState] = useState("view");
     const [emptyTeacher, setEmptyTeacher] = useState();
 
-    const table_headers = [
-        { label: "Teacher ID", accessor: "teacher_id" },
-        { label: "First Name", accessor: "first_name" },
-        { label: "Last Name", accessor: "last_name" },
-        { label: "Hire Date", accessor: "hire_date" },
-        { label: "Status", accessor: "teacher_status" }
-    ]
+    const table_headers = TABLE_HEADERS.Teachers;
 
     useEffect(() =>{
         if (Teachers.length === 0) return;

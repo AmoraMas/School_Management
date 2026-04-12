@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { TABLE_HEADERS } from "./table-headers";
 
 import Table from "./Table";
 import Form_Edit from "./Form-Edit";
@@ -14,14 +15,7 @@ function Billings() {
     const [formState, setFormState] = useState("view");
     const [emptyBilling, setEmptyBilling] = useState();
 
-    const table_headers = [
-        { label: "Billing ID", accessor: "billing_id" },
-        { label: "Student ID", accessor: "student_id" },
-        { label: "Status", accessor: "billing_status" },
-        { label: "Due Date", accessor: "due_date" },
-        { label: "Amount Due", accessor: "amount_due" },
-        { label: "Amount Paid", accessor: "amount_paid" }
-    ]
+    const table_headers = TABLE_HEADERS.Billings;
 
     useEffect(() =>{
         if (Billings.length === 0) return;

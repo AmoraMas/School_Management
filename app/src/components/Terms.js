@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { TABLE_HEADERS } from "./table-headers";
 
 import Table from "./Table";
 import Form_Edit from "./Form-Edit";
@@ -14,12 +15,7 @@ function Terms() {
     const [formState, setFormState] = useState("view");
     const [emptyTerm, setEmptyTerm] = useState();
 
-    const table_headers = [
-        { label: "Term ID", accessor: "term_id" },
-        { label: "Term Name", accessor: "term_name" },
-        { label: "Start Date", accessor: "date_start" },
-        { label: "End Date", accessor: "date_end" }
-    ]
+    const table_headers = TABLE_HEADERS.Terms;
 
     useEffect(() =>{
         if (Terms.length === 0) return;

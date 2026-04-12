@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { TABLE_HEADERS } from "./table-headers";
 
 import Table from "./Table";
 import Form_Edit from "./Form-Edit";
@@ -14,14 +15,7 @@ function Assignments() {
     const [formState, setFormState] = useState("view");
     const [emptyAssignment, setEmptyAssignment] = useState();
 
-    const table_headers = [
-        { label: "Assignment ID", accessor: "assignment_id" },
-        { label: "Course ID", accessor: "course_id" },
-        { label: "Week Number", accessor: "week_num" },
-        { label: "Title", accessor: "assignment_title" },
-        { label: "Max Points", accessor: "max_points" },
-        { label: "Extra Credit", accessor: "extra_credit" },
-    ]
+    const table_headers = TABLE_HEADERS.Assignments;
 
     useEffect(() =>{
         if (Assignments.length === 0) return;

@@ -5,7 +5,7 @@ export const TABLE_HEADERS = {
         { label: "Week Number", accessor: "week_num" },
         { label: "Title", accessor: "assignment_title" },
         { label: "Max Points", accessor: "max_points" },
-        { label: "Extra Credit", accessor: "extra_credit" },
+        { label: "Extra Credit", accessor: "extra_credit" }
     ],
 
     Billings: [

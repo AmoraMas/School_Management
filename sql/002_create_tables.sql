@@ -13,7 +13,6 @@ CREATE TABLE "public"."Students" (
   "enrollment_date" date NOT NULL,
   "degree_level" varchar(10) NOT NULL,
   "degree_major" varchar NOT NULL,
-  "major" varchar(35) NOT NULL,
   "student_status" varchar(10) DEFAULT 'active' NOT NULL,
   CHECK (
         zip ~ '^[0-9]{5}$'
