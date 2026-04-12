@@ -11,6 +11,9 @@ CREATE TABLE "public"."Students" (
   "country" varchar(15) NOT NULL,
   "zip" varchar(10) NOT NULL,
   "enrollment_date" date NOT NULL,
+  "degree_level" varchar(10) NOT NULL,
+  "degree_major" varchar NOT NULL,
+  "major" varchar(35) NOT NULL,
   "student_status" varchar(10) DEFAULT 'active' NOT NULL,
   CHECK (
         zip ~ '^[0-9]{5}$'
@@ -135,6 +138,9 @@ CREATE TABLE "public"."Roles" (
 
 ALTER TABLE "public"."Students" ADD CONSTRAINT student_status_values
   CHECK ("student_status" IN ('active', 'inactive', 'suspended', 'graduated'));
+
+ALTER TABLE "public"."Students" ADD CONSTRAINT student_degree_level_values
+  CHECK ("degree_level" IN ('Associate', 'Bachelor', 'Master', 'Doctorate'));
 
 ALTER TABLE "public"."Teachers" ADD CONSTRAINT student_status_values
   CHECK ("teacher_status" IN ('active', 'inactive', 'suspended', 'retired', 'fired'));

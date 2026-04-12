@@ -19,7 +19,9 @@ function Students() {
         { label: "First Name", accessor: "first_name" },
         { label: "Last Name", accessor: "last_name" },
         { label: "Enrollment Date", accessor: "enrollment_date" },
-        { label: "Status", accessor: "student_status" }
+        { label: "Status", accessor: "student_status" },
+        { label: "Degree Level", accessor: "degree_level"},
+        { label: "Major", accessor: "degree_major"}
     ]
 
     useEffect(() =>{

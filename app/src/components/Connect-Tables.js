@@ -5,7 +5,7 @@ import Table from "./Table";
 import Form_Edit from "./Form-Edit";
 import Form_Show from "./Form-Show";
 
-function Connect_Tables({ one, one_id, many, many_id, connected, connected_id }) {
+function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
     const [oneArray, setOneArray] = useState([]);
     const [oneSelected, setOneSelected] = useState([]);
     const [oneHeaders, setOneHeaders] = useState([]);
@@ -14,9 +14,9 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
     const [manySelected, setManySelected] = useState([]);
     const [manyHeaders, setManyHeaders] = useState([]);
 
-    const [connectedArray, setConnectedArray] = useState([]);
-    const [connectedSelected, setConnectedSelected] = useState([]);
-    const [connectedHeaders, setConnectedHeaders] = useState([]);
+    const [combinedArray, setCombinedArray] = useState([]);
+    const [combinedSelected, setCombinedSelected] = useState([]);
+    const [combinedHeaders, setCombinedHeaders] = useState([]);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -33,19 +33,63 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
     }, [manyArray])
 
     useEffect(() =>{
-        if (connectedArray.length === 0) return;
-        setConnectedHeaders(generateHeaders(connectedArray, "hide", connected_id))
-    }, [connectedArray])
+        if (combinedArray.length === 0) return;
+        setCombinedHeaders(generateHeaders(combinedArray, "hide", combined_id))
+    }, [combinedArray])
 
-    // empty Selected when Array changes
     useEffect(() => {
-        setOneSelected([]);
-    }, [oneArray]);
+        if (oneSelected.length === 1 && one === "Term_Courses" && many === "Students") {
+            updateStudentNum(oneSelected[0][one_id], combinedArray.length)
+        }
+    }, [combinedArray])
+
+    // Update middle table when combined table changes
+    // Update num students in Term_Courses if appropriate
+    useEffect(() => {
+        // Removed entries from middle table that exist in combined table
+        const updated = removeMatches(manyArray, combinedArray, many_id);
+        setManyArray(updated);
+    }, [combinedArray])
+
+    const updateStudentNum = async (id, num) => {
+        // Update database
+        const response = await fetch(`${process.env.REACT_APP_API}/${one}?${one_id}=eq.${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                // If authentication is required:
+                // 'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({num_students: num}) // e.g., { column_name: "new value" }
+        });
+        if (!response.ok) {
+            const text = await response.text();
+            console.error("PATCH error:", text);
+            throw new Error("Failed to update");
+        };
+        // Update oneSelected
+        setOneSelected(prev => {
+            if (prev.length === 0) return prev;
+            const updated = {
+                ...prev[0],
+                num_students: num
+            };
+            return [updated]
+        });
+        // Update oneArray
+        setOneArray(prev => {
+            return prev.map(row =>
+            row[one_id] === id
+                ? { ...row, num_students: num }
+                : row
+            );
+        });
+    }
 
     // GET oneArray
     useEffect(() => {
         setOneArray([]);
-        setConnectedArray([]);
+        setCombinedArray([]);
         const fetchOneData = async () => {
             try {
                 const response = await fetch(
@@ -66,7 +110,8 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
         };
 
         fetchOneData();
-    }, [one]);
+        setOneSelected([]);
+    }, [one, many]);
 
     // GET manyArray
     useEffect(() => {
@@ -90,30 +135,31 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
             }
         };
         fetchManyData();
-    }, [many]);
+        setManySelected([]);
+    }, [one, many]);
 
     // Function to run when top table entity is selected
     const handleOneSelect = (id) => {
         setOneSelected([oneArray.find(s => s[one_id] === id)]);
-        const fetchConnectedData = async () => {
+        const fetchCombinedData = async () => {
             try {
                 const response = await fetch(
-                `${process.env.REACT_APP_API}/${connected}?${one_id}=eq.${id}`
+                `${process.env.REACT_APP_API}/${combined}?${one_id}=eq.${id}`
                 );
                 if (!response.ok) {
                 throw new Error(`HTTP error: Status ${response.status}`);
                 }
                 const fetchData = await response.json();
-                setConnectedArray(fetchData);
+                setCombinedArray(fetchData);
                 setError(null);
             } catch (err) {
                 setError(err.message);
-                setConnectedArray([]);
+                setCombinedArray([]);
             } finally {
                 setLoading(false);
             }
         };
-        fetchConnectedData();
+        fetchCombinedData();
     }
 
     // Function to run when middle table entity is selected
@@ -121,22 +167,33 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
         setManySelected([manyArray.find(s => s[many_id] === id)]);
     }
 
-    // Function to run when bottom table entity is selected
-    const handleConnectedSelect = (id) => {
-        setConnectedSelected([connectedArray.find(s => s[connected_id] === id)]);
+    // Function to run when combined table entity is selected
+    const handleCombinedSelect = (id) => {
+        setCombinedSelected([combinedArray.find(s => s[combined_id] === id)]);
     }
 
     // Reset the Page
     const handleReset = () => {
         setOneSelected([]);
         setManySelected([]);
-        setConnectedArray([]);
-        setConnectedSelected([]);
+        setCombinedArray([]);
+        setCombinedSelected([]);
     }
 
     // Add many table selection to combined table
     const handleAdd = async () => {
-        const response = await fetch(`${process.env.REACT_APP_API}/${connected}`, {
+        // Do not allow if student_num === 20
+        if (manySelected.length == 0) {
+            window.alert("None selected to add!");
+                return "None Selected to add!";
+        }
+        if (one === "Term_Courses" && many === "Students") {
+            if (oneSelected[0].num_students >= 20) {
+                window.alert("Max number of students already added!");
+                return "Max number of students already added!";
+            }
+        }
+        const response = await fetch(`${process.env.REACT_APP_API}/${combined}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -151,24 +208,35 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
         });
         if (!response.ok) {
             const text = await response.text();
-            console.error("PATCH error:", text);
+            console.error("POST error:", text);
             throw new Error("Failed to update");
         };
         // PostgREST returns an array of inserted rows
         const inserted = await response.json();
-        const newConnected = inserted[0];
+        const newCombined = inserted[0];
 
-        // Add to Students state
-        setConnectedArray(prev => [...prev, newConnected]);
+        // Add to combined table
+        setCombinedArray(prev => [...prev, newCombined]);
 
-        return newConnected;
+        // Remove from middle table
+        setManyArray(prev =>
+            prev.filter(row =>
+                !(row[many_id] === manySelected[0][many_id])
+            )
+        );
+        return newCombined;
     }
 
     // Delete table selection from combined table
     const handleDelete = async () => {
-        const removed_id = connectedSelected[0][connected_id]
-        const response = await fetch(
-            `${process.env.REACT_APP_API}/${connected}?${connected_id}=eq.${removed_id}`,
+        if (combinedSelected.length == 0) {
+            window.alert("None selected to delete!");
+                return "None Selected to delete!";
+        }
+
+        const removed_id = combinedSelected[0][combined_id]
+        const responseDelete = await fetch(
+            `${process.env.REACT_APP_API}/${combined}?${combined_id}=eq.${removed_id}`,
             {
                 method: "DELETE",
                 headers: {
@@ -179,22 +247,33 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
             }
         );
 
-        if (!response.ok) {
-            const text = await response.text();
-            console.error("DELETE error:", text);
+        if (!responseDelete.ok) {
+            const text = await responseDelete.text();
             throw new Error("Failed to delete");
         }
 
         // PostgREST returns the deleted rows (array)
-        const deleted = await response.json();
+        const deleted = await responseDelete.json();
         const removed = deleted[0];
 
-        // Remove from state
-        setConnectedArray(prev =>
-            prev.filter(row =>
-                !(row[connected_id] === removed_id)
-            )
+        // Remove from combined table
+        setCombinedArray(prev =>
+            prev.filter(row => !(row[combined_id] === removed_id))
         );
+
+        const responseAdd = await fetch(
+            `${process.env.REACT_APP_API}/${many}?${many_id}=eq.${removed[many_id]}`,
+        );
+
+        if (!responseAdd.ok) {
+            const text = await responseAdd.text();
+            throw new Error(`HTTP error: Status ${responseAdd.status}`);
+        };
+
+        const added = await responseAdd.json();
+        //added = added[0]
+        setManyArray(prev => [...prev, added[0]]);
+        setError(null);
 
         return removed;
     };
@@ -240,10 +319,10 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
             <div className="App-Table-Many">
                 <div className="Table">
                     <h1>
-                        {connectedArray.length === 0 ? "None Selected" : many}
+                        {combinedArray.length === 0 ? "None Selected" : many + " in " + one}
                     </h1>
 
-                    {connectedArray.length === 0 ? (
+                    {combinedArray.length === 0 ? (
                         ""
                     ) : (
                         <>
@@ -257,7 +336,7 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
                             >
                                 Delete
                             </button>
-                            <Table columns={connectedHeaders} data={connectedArray} idField={connected_id} onSelect={handleConnectedSelect}/>
+                            <Table columns={combinedHeaders} data={combinedArray} idField={combined_id} onSelect={handleCombinedSelect}/>
                         </>
                     )}
                 </div>
@@ -265,16 +344,22 @@ function Connect_Tables({ one, one_id, many, many_id, connected, connected_id })
         </div>
     )
 
+    function removeMatches(sourceArray, filterArray, key) {
+        const filterSet = new Set(filterArray.map(item => item[key]));
+        return sourceArray.filter(item => !filterSet.has(item[key]));
+    }
+
     // Function to generate headers automatically
     function generateHeaders(data, action, data_id) {
-    if (!data || data.length === 0) return [];
+        if (!data || data.length === 0) return [];
 
-    return Object.keys(data[0])
-        .filter(key => !isIdField(key, action, data_id))
-        .map(key => ({
-            label: formatLabel(key),
-            accessor: key
-        }));
+        return Object.keys(data[0])
+            .filter(key => !isIdField(key, action, data_id))
+            .map(key => ({
+                label: formatLabel(key),
+                accessor: key
+            })
+        );
     }
 
     function isIdField(key, action, data_id) {
