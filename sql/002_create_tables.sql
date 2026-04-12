@@ -91,7 +91,7 @@ CREATE TABLE "public"."Student_Course_Enrollments" (
   "term_course_id" integer NOT NULL,
   "enrollment_date" date DEFAULT CURRENT_DATE,
   "grade_num" integer DEFAULT 0,
-  "grade_Let" varchar(2)
+  "grade_let" varchar(2)
 );
 
 CREATE TABLE "public"."Student_Course_Assignment_Grades" (

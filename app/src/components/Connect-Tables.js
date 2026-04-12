@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { TABLE_HEADERS } from "./table-headers";
 
 import Table from "./Table";
 import Form_Edit from "./Form-Edit";
@@ -24,24 +25,23 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
     // Update headers when arrays change
     useEffect(() =>{
         if (oneArray.length === 0) return;
-        setOneHeaders(generateHeaders(oneArray, "show", one_id))
+        //setOneHeaders(generateHeaders(oneArray, "show", one_id))
+        setOneHeaders(TABLE_HEADERS[one])
     }, [oneArray])
 
     useEffect(() =>{
         if (manyArray.length === 0) return;
-        setManyHeaders(generateHeaders(manyArray, "hide", many_id))
+        //setManyHeaders(generateHeaders(manyArray, "hide", many_id))
+        setManyHeaders(TABLE_HEADERS[many])
     }, [manyArray])
 
     useEffect(() =>{
         if (combinedArray.length === 0) return;
-        setCombinedHeaders(generateHeaders(combinedArray, "hide", combined_id))
+        //setCombinedHeaders(generateHeaders(combinedArray, "hide", combined_id))
+        setCombinedHeaders(TABLE_HEADERS[combined])
     }, [combinedArray])
 
-    useEffect(() => {
-        if (oneSelected.length === 1 && one === "Term_Courses" && many === "Students") {
-            updateStudentNum(oneSelected[0][one_id], combinedArray.length)
-        }
-    }, [combinedArray])
+
 
     // Update middle table when combined table changes
     // Update num students in Term_Courses if appropriate
@@ -49,7 +49,17 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
         // Removed entries from middle table that exist in combined table
         const updated = removeMatches(manyArray, combinedArray, many_id);
         setManyArray(updated);
+        if (oneSelected.length === 1 && one === "Term_Courses" && many === "Students") {
+            updateStudentNum(oneSelected[0][one_id], combinedArray.length)
+        }
     }, [combinedArray])
+
+    useEffect(() => {
+        if (error !== null) {
+            console.error("PATCH error:", error);
+            window.alert(error);
+        }
+    }, [error])
 
     const updateStudentNum = async (id, num) => {
         // Update database
@@ -64,7 +74,7 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
         });
         if (!response.ok) {
             const text = await response.text();
-            console.error("PATCH error:", text);
+            setError("PATCH error:", text);
             throw new Error("Failed to update");
         };
         // Update oneSelected
@@ -88,54 +98,14 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
 
     // GET oneArray
     useEffect(() => {
-        setOneArray([]);
-        setCombinedArray([]);
-        const fetchOneData = async () => {
-            try {
-                const response = await fetch(
-                `${process.env.REACT_APP_API}/${one}`
-                );
-                if (!response.ok) {
-                throw new Error(`HTTP error: Status ${response.status}`);
-                }
-                const fetchData = await response.json();
-                setOneArray(fetchData);
-                setError(null);
-            } catch (err) {
-                setError(err.message);
-                setOneArray([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchOneData();
         setOneSelected([]);
+        fetchOneData();
     }, [one, many]);
 
     // GET manyArray
     useEffect(() => {
-        setManyArray([]);
-        const fetchManyData = async () => {
-            try {
-                const response = await fetch(
-                `${process.env.REACT_APP_API}/${many}`
-                );
-                if (!response.ok) {
-                throw new Error(`HTTP error: Status ${response.status}`);
-                }
-                const fetchData = await response.json();
-                setManyArray(fetchData);
-                setError(null);
-            } catch (err) {
-                setError(err.message);
-                setManyArray([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchManyData();
         setManySelected([]);
+        fetchManyData();
     }, [one, many]);
 
     // Function to run when top table entity is selected
@@ -176,8 +146,10 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
     const handleReset = () => {
         setOneSelected([]);
         setManySelected([]);
-        setCombinedArray([]);
         setCombinedSelected([]);
+        setManyArray([]);
+        setCombinedArray([]);
+        fetchManyData();
     }
 
     // Add many table selection to combined table
@@ -208,7 +180,7 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
         });
         if (!response.ok) {
             const text = await response.text();
-            console.error("POST error:", text);
+            setError("POST error:", text);
             throw new Error("Failed to update");
         };
         // PostgREST returns an array of inserted rows
@@ -271,11 +243,53 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
         };
 
         const added = await responseAdd.json();
-        //added = added[0]
         setManyArray(prev => [...prev, added[0]]);
         setError(null);
 
         return removed;
+    };
+
+    const fetchOneData = async () => {
+        setOneArray([]);
+        setCombinedArray([]);
+        setLoading(true);
+        try {
+            const response = await fetch(
+            `${process.env.REACT_APP_API}/${one}`
+            );
+            if (!response.ok) {
+            throw new Error(`HTTP error: Status ${response.status}`);
+            }
+            const fetchData = await response.json();
+            setOneArray(fetchData);
+            setError(null);
+        } catch (err) {
+            setError(err.message);
+            setOneArray([]);
+        } finally {
+            setLoading(false);
+            setOneSelected([]);
+        }
+    };
+
+    const fetchManyData = async () => {
+        setManyArray([]);
+        setLoading(true);
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API}/${many}`);
+            if (!response.ok) {
+            throw new Error(`HTTP error: Status ${response.status}`);
+            }
+            const fetchData = await response.json();
+            setManyArray(fetchData);
+            setError(null);
+        } catch (err) {
+            setError(err.message);
+            setManyArray([]);
+        } finally {
+            setLoading(false);
+            setManySelected([]);
+        }
     };
 
     return (
@@ -342,12 +356,12 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
                 </div>
             </div>
         </div>
-    )
+    );
 
     function removeMatches(sourceArray, filterArray, key) {
         const filterSet = new Set(filterArray.map(item => item[key]));
         return sourceArray.filter(item => !filterSet.has(item[key]));
-    }
+    };
 
     // Function to generate headers automatically
     function generateHeaders(data, action, data_id) {
@@ -360,7 +374,7 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
                 accessor: key
             })
         );
-    }
+    };
 
     function isIdField(key, action, data_id) {
         if (action === "show") {
@@ -379,7 +393,7 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
             if (key.endsWith("_id")) return true;
         }
         return false;
-    }
+    };
 
     // Helper to convert snake_case or camelCase into readable labels
     function formatLabel(key) {
@@ -389,7 +403,7 @@ function Connect_Tables({ one, one_id, many, many_id, combined, combined_id }) {
         .replace(/\s+/g, " ")               // cleanup
         .trim()
         .replace(/\b\w/g, c => c.toUpperCase()); // capitalize words
-    }
+    };
 }
 
 export default Connect_Tables;
