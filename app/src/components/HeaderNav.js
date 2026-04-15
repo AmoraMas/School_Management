@@ -21,9 +21,7 @@ function HeaderNav({ onNavClick }) {
         </button>
         {openMenu === "menu1" && (
           <div style={styles.menu}>
-            <div style={styles.item} onClick={() => handleClick("courses")}>My Courses</div>
-            <div style={styles.item} onClick={() => handleClick("students")}>My Students</div>
-            <div style={styles.item} onClick={() => handleClick("grades")}>My Grades</div>
+            <div style={styles.item} onClick={() => handleClick("teacherportal")}>Portal</div>
           </div>
         )}
       </div>

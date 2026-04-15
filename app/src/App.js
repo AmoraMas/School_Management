@@ -10,11 +10,13 @@ import Billings from "./components/Billings";
 import Terms from "./components/Terms";
 import Assignments from "./components/Assignments";
 import Connect_Tables from "./components/Connect-Tables";
+import Teacher_Portal from "./components/Teacher-Portal";
 import './App.css';
 
 function App() {
 
-    const [pageView, setPageView] = useState("courses");
+    const [pageView, setPageView] = useState("teacherportal");
+    const [teacherID, setTeacherID] = useState(1);
 
     const handlePageChange = (page) => {
         setPageView(page);
@@ -40,6 +42,10 @@ function App() {
             <Terms />
           ) : pageView === "assignments" ? (
             <Assignments />
+          ) : pageView === "teacherportal" && !Number.isInteger(teacherID) ? (
+            "No Teacher Information Provided"
+          ) : pageView === "teacherportal" && Number.isInteger(teacherID) ? (
+            <Teacher_Portal teacherID={teacherID} />
           ) : pageView === "courses2term" ? (
             <Connect_Tables one="Terms" many="Courses" one_id="term_id" many_id="course_id" combined="Term_Courses" combined_id="term_course_id" />
           ) : pageView === "students2course" ? (
