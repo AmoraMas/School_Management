@@ -16,7 +16,7 @@ function Teacher_Portal({ teacherID }) {
     const [studentSelected, setStudentSelected] = useState([]);
 
     const [assignmentArray, setAssignmentArray] = useState([]);
-    const [assignmentSelected, setAssignemntSelected] = useState([]);
+    const [assignmentSelected, setAssignmentSelected] = useState([]);
 
     const [gradeArray, setGradeArray] = useState([]);
     const [gradeSelected, setGradeSelected] = useState([]);
@@ -43,6 +43,7 @@ function Teacher_Portal({ teacherID }) {
         { label: "Grade Letter", accessor: "grade_let" }
     ]
     const gradeHeaders = TABLE_HEADERS.Student_Course_Assignment_Grades;
+    const assignmentHeaders = TABLE_HEADERS.Assignments;
 
     useEffect(() =>{
         if (courseTime.length === 0) return;
@@ -108,7 +109,7 @@ function Teacher_Portal({ teacherID }) {
             setAssignmentArray([]);
         } finally {
             setLoading(false);
-            setAssignemntSelected([]);
+            setAssignmentSelected([]);
         }
     };
 
@@ -161,6 +162,14 @@ function Teacher_Portal({ teacherID }) {
         setStudentSelected([studentArray.find(s => s.enrollment_id === id)]);
     }
 
+    const handleAssignmentSelect = (id) => {
+        setAssignmentSelected([assignmentArray.find(s => s.assignment_id === id)]);
+    }
+
+    const handleGradeSelect = (id) => {
+        setGradeSelected([assignmentArray.find(s => s.grade_id === id)]);
+    }
+
     const handleFormAdd = () => {
 
     }
@@ -205,6 +214,32 @@ function Teacher_Portal({ teacherID }) {
                     )}
                 </div>
             </div>
+            <div className="App-Table-Many">
+                <div className="Table">
+                    <h1>
+                        {courseSelected.length === 0 ? "None Selected" : "Assignments"}
+                    </h1>
+                    {courseSelected.length === 0 ? (
+                        ""
+                    ) : (
+                        <Table columns={assignmentHeaders} data={assignmentArray} idField="assignment_id" onSelect={handleAssignmentSelect} />
+                    )}
+                </div>
+            </div>
+            <div className="App-Table-Many">
+                <div className="Table">
+                    <h1>
+                        {studentSelected.length === 0 ? "None Selected" : "Student Grades"}
+                    </h1>
+                    {studentSelected.length === 0 ? (
+                        ""
+                    ) : (
+                        <Table columns={gradeHeaders} data={gradeArray} idField="grade_id" onSelect={handleGradeSelect} />
+                    )}
+                </div>
+            </div>
+
+
             <div className="App-Form-Outer">
                 {!studentSelected ? (
                     <h1>...No Student Selected...</h1>
