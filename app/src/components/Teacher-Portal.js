@@ -15,6 +15,12 @@ function Teacher_Portal({ teacherID }) {
     const [studentArray, setStudentArray] = useState([]);
     const [studentSelected, setStudentSelected] = useState([]);
 
+    const [assignmentArray, setAssignmentArray] = useState([]);
+    const [assignmentSelected, setAssignemntSelected] = useState([]);
+
+    const [gradeArray, setGradeArray] = useState([]);
+    const [gradeSelected, setGradeSelected] = useState([]);
+
     const [student, setStudent] = useState([]);
     const [formState, setFormState] = useState("view");
     const [emptyStudent, setEmptyStudent] = useState();
@@ -24,16 +30,13 @@ function Teacher_Portal({ teacherID }) {
 
     //const courseHeaders = TABLE_HEADERS.Term_Courses;
     const courseHeaders = [
-        { label: "ID", accessor: "term_course_id" },
         { label: "Term ID", accessor: "Terms.term_name" },
         { label: "Course ID", accessor: "Courses.course_code" },
-        { label: "Teacher ID", accessor: "teacher_id" },
         { label: "Num Sudents", accessor: "num_students" }
     ]
 
     //const studentHeaders = TABLE_HEADERS.Students;
     const studentHeaders = [
-        { label: "ID", accessor: "student_id" },
         { label: "First Name", accessor: "Students.first_name" },
         { label: "Last Name", accessor: "Students.last_name" },
         { label: "Grade Number", accessor: "grade_num" },
@@ -52,6 +55,11 @@ function Teacher_Portal({ teacherID }) {
         fetchCourseData();
     }, [courseTime])
 
+    useEffect(() => {
+        fetchAssignmentData();
+        fetchGradeData();
+    }, [courseSelected])
+
     const fetchCourseData = async () => {
         const today = new Date().toISOString().slice(0,10);
         let filter = "";
@@ -67,7 +75,6 @@ function Teacher_Portal({ teacherID }) {
         setLoading(true);
         try {
             const response = await fetch(
-            //`${process.env.REACT_APP_API}/Term_Courses?teacher_id=eq.${teacherID}&select=*,Terms!inner(*)${filter}`
             `${process.env.REACT_APP_API}/Term_Courses?teacher_id=eq.${teacherID}&select=*,Terms!inner(*),Courses(*)${filter}`
             );
             if (!response.ok) {
@@ -82,6 +89,46 @@ function Teacher_Portal({ teacherID }) {
         } finally {
             setLoading(false);
             setCourseSelected([]);
+        }
+    };
+
+    const fetchAssignmentData = async () => {
+        try {
+            const response = await fetch(
+            `${process.env.REACT_APP_API}/Assignments?course_id=eq.${courseSelected[0].course_id}`
+            );
+            if (!response.ok) {
+            throw new Error(`HTTP error: Status ${response.status}`);
+            }
+            const fetchData = await response.json();
+            setAssignmentArray(fetchData);
+            setError(null);
+        } catch (err) {
+            setError(err.message);
+            setAssignmentArray([]);
+        } finally {
+            setLoading(false);
+            setAssignemntSelected([]);
+        }
+    };
+
+    const fetchGradeData = async () => {
+        try {
+            const response = await fetch(
+            `${process.env.REACT_APP_API}/Student_Course_Assignment_Grades?term_course_id=eq.${courseSelected[0].term_course_id}&select=*,Students(*),Assignments(*)`
+            );
+            if (!response.ok) {
+            throw new Error(`HTTP error: Status ${response.status}`);
+            }
+            const fetchData = await response.json();
+            setGradeArray(fetchData);
+            setError(null);
+        } catch (err) {
+            setError(err.message);
+            setGradeArray([]);
+        } finally {
+            setLoading(false);
+            setGradeSelected([]);
         }
     };
 

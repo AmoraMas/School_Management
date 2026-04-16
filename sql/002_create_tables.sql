@@ -210,6 +210,10 @@ ALTER TABLE "public"."Authentications" ADD CONSTRAINT authentications_role_id_fk
   ON UPDATE NO ACTION
   ON DELETE No ACTION;
 
+ALTER TABLE "public"."Student_Course_Assignment_Grades"
+  ADD CONSTRAINT unique_student_term_assignment
+  UNIQUE (student_id, term_course_id, assignment_id);
+
 GRANT ALL ON TABLE "public"."Students" TO api_anon_user;
 GRANT ALL ON TABLE "public"."Teachers" TO api_anon_user;
 GRANT ALL ON TABLE "public"."Terms" TO api_anon_user;
