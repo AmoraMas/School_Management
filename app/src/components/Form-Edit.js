@@ -33,6 +33,7 @@ function Form_Edit({ title, rawData, idField, onSave}) {
         else if (key.includes("email")) return "email";
         else if (key.includes("phone")) return "tel";
         else if (key.includes("description")) return "textarea";
+        else if (key.includes("feedback")) return "textarea";
         else if (typeof value === "boolean") return "checkbox";
         else if (typeof value === "number") return "number";
         else if (typeof value === "string") {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMemo } from "react";
 
-function Table_Test({ data, columns, idField, onSelect }) {
+function Table({ data, columns, idField, onSelect }) {
   const [selectedId, setSelectedId] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [search, setSearch] = useState("");
@@ -126,4 +126,4 @@ const finalColumns = buildColumns(columns, sortedData);
 
 }
 
-export default Table_Test;
+export default Table;
