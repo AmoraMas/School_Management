@@ -1,11 +1,11 @@
 import HeaderNav from "./HeaderNav"
-import logo from '../images/logo.svg';
+import logo from '../images/Logo.png';
 
-function Header({ handlePage }) {
+function Header({ role, handlePage }) {
     return (
         <div className="App-Header">
             <div className="Header-Left">
-                <img src={logo} alt="logo" height="100vh" width="100vh"/>
+                <img className="App-Logo" src={logo} alt="logo" height="100vh" width="100vh"/>
             </div>
             <div className="Header-Left">
                 Fictional
@@ -14,7 +14,7 @@ function Header({ handlePage }) {
             </div>
                 <div className="Header-Right">
                 <div className="item1">ACCOUNT</div>
-                <HeaderNav onNavClick={handlePage}/>
+                <HeaderNav role={role} onNavClick={handlePage}/>
             </div>
         </div>
     )

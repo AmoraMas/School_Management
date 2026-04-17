@@ -20,9 +20,11 @@
   min-height: 79vh;
 }
 
-.App-logo {
-  height: 40vmin;
+.App-Logo {
+  height: 100px;
+  width: 100px;
   pointer-events: none;
+  border-radius: 25px;
 }
 
 .App-Table {
