@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useMemo } from "react";
 
-function Form_Edit({ title, rawData, onSave}) {
+function Form_Edit({ title, rawData, idField, onSave}) {
 
     const [originalData, setOriginalData] = useState(() => rawData);
     const [data, setData] = useState(() => rawData);
@@ -45,7 +45,7 @@ function Form_Edit({ title, rawData, onSave}) {
     
     const fields = useMemo(() => {
         return Object.entries(data)
-            .filter(([key]) => !key.endsWith("_id"))
+            .filter(([key]) => key !== idField)
             .map(([key, value]) => ({
                 key,
                 value,

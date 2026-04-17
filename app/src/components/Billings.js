@@ -154,11 +154,11 @@ function Billings() {
                 {!billing ? (
                     <h1>...No Billing Selected...</h1>
                 ) :  formState === "add" ? (
-                    <Form_Edit title="Add Billing" rawData={emptyBilling} onSave={handleFormAdd} />
+                    <Form_Edit title="Add Billing" rawData={emptyBilling} idField="billing_id" onSave={handleFormAdd} />
                 ) : formState === "edit" ? (
-                    <Form_Edit title="Edit Billing" rawData={billing} onSave={handleFormEdit} />
+                    <Form_Edit title="Edit Billing" rawData={billing} idField="billing_id" onSave={handleFormEdit} />
                 ) : formState === "view" ? (
-                    <Form_Show title="View Billing" rawData={billing} />
+                    <Form_Show title="View Billing" rawData={billing} idField="billing_id" />
                 ) : (
                     <h1>Select an Action</h1>
                 )}

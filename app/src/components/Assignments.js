@@ -154,11 +154,11 @@ function Assignments() {
                 {!assignment ? (
                     <h1>...No Assignment Selected...</h1>
                 ) :  formState === "add" ? (
-                    <Form_Edit title="Add Assignment" rawData={emptyAssignment} onSave={handleFormAdd} />
+                    <Form_Edit title="Add Assignment" rawData={emptyAssignment} idField="assignment_id" onSave={handleFormAdd} />
                 ) : formState === "edit" ? (
-                    <Form_Edit title="Edit Assignment" rawData={assignment} onSave={handleFormEdit} />
+                    <Form_Edit title="Edit Assignment" rawData={assignment} idField="assignment_id" onSave={handleFormEdit} />
                 ) : formState === "view" ? (
-                    <Form_Show title="View Assignment" rawData={assignment} />
+                    <Form_Show title="View Assignment" rawData={assignment} idField="assignment_id" />
                 ) : (
                     <h1>Select an Action</h1>
                 )}

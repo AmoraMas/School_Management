@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 
-function Form_Show({ title, rawData }) {
+function Form_Show({ title, rawData, idField}) {
   const [fields, setFields] = useState([]);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function Form_Show({ title, rawData }) {
     }
 
     const newFields = Object.entries(rawData)
-      .filter(([key]) => !key.endsWith("_id"))
+      .filter(([key]) => key !== idField)
       .map(([key, value]) => ({
         type: detectType(key, value),
         key,

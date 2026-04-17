@@ -154,11 +154,11 @@ function Teachers() {
                 {!teacher ? (
                     <h1>...No Teacher Selected...</h1>
                 ) :  formState === "add" ? (
-                    <Form_Edit title="Add Teacher" rawData={emptyTeacher} onSave={handleFormAdd} />
+                    <Form_Edit title="Add Teacher" rawData={emptyTeacher} idField="teacher_id" onSave={handleFormAdd} />
                 ) : formState === "edit" ? (
-                    <Form_Edit title="Edit Teacher" rawData={teacher} onSave={handleFormEdit} />
+                    <Form_Edit title="Edit Teacher" rawData={teacher} idField="teacher_id" onSave={handleFormEdit} />
                 ) : formState === "view" ? (
-                    <Form_Show title="View Teacher" rawData={teacher} />
+                    <Form_Show title="View Teacher" rawData={teacher} idField="teacher_id" />
                 ) : (
                     <h1>Select an Action</h1>
                 )}

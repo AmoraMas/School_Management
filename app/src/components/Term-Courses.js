@@ -6,49 +6,49 @@ import Table from "./Table";
 import Form_Edit from "./Form-Edit";
 import Form_Show from "./Form-Show";
 
-function Students() {
+function Term_Courses() {
 
-    const [Students, setStudents] = useState([]);
+    const [Term_Courses, setTerm_Courses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [student, setStudent] = useState([]);
+    const [term_course, setTerm_Course] = useState([]);
     const [formState, setFormState] = useState("view");
-    const [emptyStudent, setEmptyStudent] = useState();
+    const [emptyTerm_Course, setEmptyTerm_Course] = useState();
 
-    const table_headers = TABLE_HEADERS.Students;
+    const table_headers = TABLE_HEADERS.Term_Courses;
 
     useEffect(() =>{
-        if (Students.length === 0) return;
-        setEmptyStudent(
+        if (Term_Courses.length === 0) return;
+        setEmptyTerm_Course(
             Object.fromEntries(
-                Object.keys(Students[0])
-                .filter(key => key !== "student_id") 
+                Object.keys(Term_Courses[0])
+                .filter(key => key !== "term_course_id") 
                 .map(key => [key, ""])
             )
         );
-    }, [Students])
+    }, [Term_Courses])
 
     useEffect(() => {
-        const fetchStudentData = async () => {
+        const fetchTerm_CourseData = async () => {
             try {
                 const response = await fetch(
-                `${process.env.REACT_APP_API}/Students`
+                `${process.env.REACT_APP_API}/Term_Courses`
                 );
                 if (!response.ok) {
                 throw new Error(`HTTP error: Status ${response.status}`);
                 }
                 const fetchData = await response.json();
-                setStudents(fetchData);
+                setTerm_Courses(fetchData);
                 setError(null);
             } catch (err) {
                 setError(err.message);
-                setStudents([]);
+                setTerm_Courses([]);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchStudentData();
+        fetchTerm_CourseData();
     }, []);
 
     function diffObjects(original, updated) {
@@ -62,12 +62,12 @@ function Students() {
     }
 
     const handleTableSelect = (id) => {
-        setStudent(Students.find(s => s.student_id === id));
+        setTerm_Course(Term_Courses.find(s => s.term_course_id === id));
     }
 
     const handleFormAdd = async (newData) => {
         console.log("newData:  ", newData);
-        const response = await fetch(`${process.env.REACT_APP_API}/Students`, {
+        const response = await fetch(`${process.env.REACT_APP_API}/Term_Courses`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -84,18 +84,18 @@ function Students() {
         };
         // PostgREST returns an array of inserted rows
         const inserted = await response.json();
-        const newStudent = inserted[0];
+        const newTerm_Course = inserted[0];
 
-        // Add to Students state
-        setStudents(prev => [...prev, newStudent]);
+        // Add to Term_Courses state
+        setTerm_Courses(prev => [...prev, newTerm_Course]);
 
-        return newStudent;
+        return newTerm_Course;
     }
 
     const handleFormEdit = async (updatedData) => {
-        const id = updatedData.student_id;
-        const update = diffObjects(Students.find(s => s.student_id === id), updatedData);
-        const response = await fetch(`${process.env.REACT_APP_API}/Students?student_id=eq.${id}`, {
+        const id = updatedData.term_course_id;
+        const update = diffObjects(Term_Courses.find(s => s.term_course_id === id), updatedData);
+        const response = await fetch(`${process.env.REACT_APP_API}/Term_Courses?term_course_id=eq.${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -109,9 +109,9 @@ function Students() {
             console.error("PATCH error:", text);
             throw new Error("Failed to update");
         };
-        const index = Students.findIndex(s => s.student_id === id);
+        const index = Term_Courses.findIndex(s => s.term_course_id === id);
         if (index != -1) {
-            setStudents(prev => {
+            setTerm_Courses(prev => {
                 const copy = [...prev];     // Shallow copy
                 copy[index] = updatedData;  // replace only the one entry
                 return copy;                // return the new array
@@ -125,39 +125,39 @@ function Students() {
             <div className="App-Table-Many">
                 <div className="Table">
                     <h1>
-                        Students
+                        Term_Courses
                     </h1>
                     <button
                         className={formState === "add" ? "Selected" : ""}
                         onClick={() => setFormState("add")}
                     >
-                        Add Student
+                        Add Term_Course
                     </button>
                     <button
                         className={formState === "edit" ? "Selected" : ""}
                         onClick={() => setFormState("edit")}
                     >
-                        Edit Student
+                        Edit Term_Course
                     </button>
                     <button
                         className={formState === "view" ? "Selected" : ""}
                         onClick={() => setFormState("view")}
                     >
-                        View Student
+                        View Term_Course
                     </button>
-                    <Table columns={table_headers} data={Students} idField="student_id" onSelect={handleTableSelect}/>
+                    <Table columns={table_headers} data={Term_Courses} idField="term_course_id" onSelect={handleTableSelect}/>
                 </div>
             </div>
 
             <div className="App-Form-Outer">
-                {!student ? (
-                    <h1>...No Student Selected...</h1>
+                {!term_course ? (
+                    <h1>...No Term_Course Selected...</h1>
                 ) :  formState === "add" ? (
-                    <Form_Edit title="Add Student" rawData={emptyStudent} idField="student_id" onSave={handleFormAdd} />
+                    <Form_Edit title="Add Term_Course" rawData={emptyTerm_Course} idField="term_course_id" onSave={handleFormAdd} />
                 ) : formState === "edit" ? (
-                    <Form_Edit title="Edit Student" rawData={student} idField="student_id" onSave={handleFormEdit} />
+                    <Form_Edit title="Edit Term_Course" rawData={term_course} idField="term_course_id" onSave={handleFormEdit} />
                 ) : formState === "view" ? (
-                    <Form_Show title="View Student" rawData={student} idField="student_id" />
+                    <Form_Show title="View Term_Course" rawData={term_course} idField="term_course_id" />
                 ) : (
                     <h1>Select an Action</h1>
                 )}
@@ -166,4 +166,4 @@ function Students() {
     )
 }
 
-export default Students;
+export default Term_Courses;

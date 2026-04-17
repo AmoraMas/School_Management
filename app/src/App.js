@@ -3,12 +3,14 @@ import { useEffect } from "react";
 
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import About from "./components/About";
 import Students from "./components/Students";
 import Teachers from "./components/Teachers";
 import Courses from "./components/Courses";
 import Billings from "./components/Billings";
 import Terms from "./components/Terms";
 import Assignments from "./components/Assignments";
+import Term_Courses from "./components/Term-Courses";
 import Connect_Tables from "./components/Connect-Tables";
 import Teacher_Portal from "./components/Teacher-Portal";
 import './App.css';
@@ -30,6 +32,8 @@ function App() {
         <div className="App-Body">
           {!pageView ? (
             <caption>...No Page Selected...</caption>
+          ) : pageView === "about" ? (
+            <About />
           ) : pageView === "students" ? (
             <Students />
           ) : pageView === "teachers" ? (
@@ -46,6 +50,8 @@ function App() {
             "No Teacher Information Provided"
           ) : pageView === "teacherportal" && Number.isInteger(teacherID) ? (
             <Teacher_Portal teacherID={teacherID} />
+          ) : pageView === "term_courses" ? (
+            <Term_Courses />
           ) : pageView === "courses2term" ? (
             <Connect_Tables one="Terms" many="Courses" one_id="term_id" many_id="course_id" combined="Term_Courses" combined_id="term_course_id" />
           ) : pageView === "students2course" ? (

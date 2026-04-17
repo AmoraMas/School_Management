@@ -154,11 +154,11 @@ function Terms() {
                 {!term ? (
                     <h1>...No Term Selected...</h1>
                 ) :  formState === "add" ? (
-                    <Form_Edit title="Add Term" rawData={emptyTerm} onSave={handleFormAdd} />
+                    <Form_Edit title="Add Term" rawData={emptyTerm} idField="term_id" onSave={handleFormAdd} />
                 ) : formState === "edit" ? (
-                    <Form_Edit title="Edit Term" rawData={term} onSave={handleFormEdit} />
+                    <Form_Edit title="Edit Term" rawData={term} idField="term_id" onSave={handleFormEdit} />
                 ) : formState === "view" ? (
-                    <Form_Show title="View Term" rawData={term} />
+                    <Form_Show title="View Term" rawData={term} idField="term_id" />
                 ) : (
                     <h1>Select an Action</h1>
                 )}

@@ -154,11 +154,11 @@ function Courses() {
                 {!course ? (
                     <h1>...No Course Selected...</h1>
                 ) :  formState === "add" ? (
-                    <Form_Edit title="Add Course" rawData={emptyCourse} onSave={handleFormAdd} />
+                    <Form_Edit title="Add Course" rawData={emptyCourse} idField="course_id" onSave={handleFormAdd} />
                 ) : formState === "edit" ? (
-                    <Form_Edit title="Edit Course" rawData={course} onSave={handleFormEdit} />
+                    <Form_Edit title="Edit Course" rawData={course} idField="course_id" onSave={handleFormEdit} />
                 ) : formState === "view" ? (
-                    <Form_Show title="View Course" rawData={course} />
+                    <Form_Show title="View Course" rawData={course} idField="course_id" />
                 ) : (
                     <h1>Select an Action</h1>
                 )}

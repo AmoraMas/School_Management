@@ -17,11 +17,11 @@ function HeaderNav({ onNavClick }) {
       {/* Dropdown 1 */}
       <div style={styles.dropdown}>
         <button style={styles.button} onClick={() => toggleMenu("menu1")}>
-          Teacher Portal
+          Finance
         </button>
         {openMenu === "menu1" && (
           <div style={styles.menu}>
-            <div style={styles.item} onClick={() => handleClick("teacherportal")}>Portal</div>
+            <div style={styles.item} onClick={() => handleClick("billings")}>Billing</div>
           </div>
         )}
       </div>
@@ -29,39 +29,55 @@ function HeaderNav({ onNavClick }) {
       {/* Dropdown 2 */}
       <div style={styles.dropdown}>
         <button style={styles.button} onClick={() => toggleMenu("menu2")}>
-          Admin Portal
+          Teacher
         </button>
         {openMenu === "menu2" && (
           <div style={styles.menu}>
-            <div style={styles.item} onClick={() => handleClick("billings")}>Billing</div>
+            <div style={styles.item} onClick={() => handleClick("teacherportal")}>Portal</div>
+          </div>
+        )}
+      </div>
+
+      {/* Dropdown 3 */}
+      <div style={styles.dropdown}>
+        <button style={styles.button} onClick={() => toggleMenu("menu3")}>
+          Admin
+        </button>
+        {openMenu === "menu3" && (
+          <div style={styles.menu}>
             <div style={styles.item} onClick={() => handleClick("terms")}>Terms</div>
-            <div style={styles.item} onClick={() => handleClick("teachers")}>Teachers</div>
             <div style={styles.item} onClick={() => handleClick("courses")}>Courses</div>
-            <div style={styles.subMenu}>
-              <div style={styles.subItem} onClick={() => handleClick("courses2term")}>
-                To Term
-              </div>
-            </div>
-            <div style={styles.item} onClick={() => handleClick("students")}>Students</div>
-            <div style={styles.subMenu}>
-              <div style={styles.subItem} onClick={() => handleClick("students2course")}>
-                To Course
-              </div>
-            </div>
             <div style={styles.item} onClick={() => handleClick("assignments")}>Assignments</div>
+            <div style={styles.item} onClick={() => handleClick("teachers")}>Teachers</div>
+            <div style={styles.item} onClick={() => handleClick("students")}>Students</div>
+            <div style={styles.item} onClick={() => handleClick("term_courses")}>Term Courses</div>
+            
             <div style={styles.subMenu}>
               <div style={styles.subItem} onClick={() => handleClick("assignments2course")}>
-                To Course
+                Assignments To Course
               </div>
             </div>
+
+            <div style={styles.subMenu}>
+              <div style={styles.subItem} onClick={() => handleClick("courses2term")}>
+                Courses To Term
+              </div>
+            </div>
+            
+            <div style={styles.subMenu}>
+              <div style={styles.subItem} onClick={() => handleClick("students2course")}>
+                Students To Course
+              </div>
+            </div>
+            
           </div>
         )}
       </div>
 
       {/* About Link */}
       <div
-        style={styles.link}
-        onClick={() => handleClick("About")}
+        style={styles.button}
+        onClick={() => handleClick("about")}
       >
         About
       </div>
@@ -84,12 +100,13 @@ const styles = {
   button: {
     background: "#282c34",
     border: "1px solid white",
-    padding: "6px 10px",
+    padding: "6px 6px",
     cursor: "pointer",
     color: "white"
   },
   menu: {
     position: "absolute",
+    fontSize: 20,
     top: "35px",
     left: 0,
     background: "#282c34",
@@ -98,7 +115,7 @@ const styles = {
     zIndex: 10
   },
   item: {
-    padding: "8px 12px",
+    padding: "5px 12px",
     cursor: "pointer",
     whiteSpace: "nowrap",
     color: "white",
@@ -116,6 +133,7 @@ const styles = {
   },
   subMenu: {
     paddingLeft: "30px",
+    paddingRight: "12px",
     display: "flex",
     flexDirection: "column",
     gap: "4px",
@@ -123,7 +141,7 @@ const styles = {
   },
   subItem: {
     cursor: "pointer",
-    color: "grey",
+    color: "#c5c5c5",
     padding: "4px 0",
     textAlign: "left"
   }
