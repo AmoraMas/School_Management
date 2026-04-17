@@ -38,7 +38,8 @@ function HeaderNav({ role, onNavClick }) {
             </button>
             {openMenu === "menu2" && (
               <div style={styles.menu}>
-                <div style={styles.item} onClick={() => handleClick("teacherportal")}>Portal</div>
+                <div style={styles.item} onClick={() => handleClick("addassignments")}>Add Assignments</div>
+                <div style={styles.item} onClick={() => handleClick("editgrades")}>Edit Grades</div>
               </div>
             )}
           </div>

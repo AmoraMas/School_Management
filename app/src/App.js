@@ -33,7 +33,7 @@ function App() {
       setPageView("billings");
     }
     else if (role === "teacher") {
-      setPageView("teacherportal");
+      setPageView("editgrades");
     }
     else {
       setPageView("about");
@@ -62,10 +62,10 @@ function App() {
             <Terms />
           ) : pageView === "assignments" && role === "admin" ? (
             <Assignments />
-          ) : pageView === "teacherportal" && role !== "teacher" && !Number.isInteger(userID) ? (
-            "Teacher information is incorrect"
-          ) : pageView === "teacherportal" && role === "teacher" && Number.isInteger(userID) ? (
-            <Teacher_Portal teacherID={userID} />
+          ) : pageView === "addassignments" && role === "teacher" && Number.isInteger(userID) ? (
+            <Teacher_Portal teacherID={userID} edit="assignments" />
+          ) : pageView === "editgrades" && role === "teacher" && Number.isInteger(userID) ? (
+            <Teacher_Portal teacherID={userID} edit="grades" />
           ) : pageView === "term_courses" && role === "admin" ? (
             <Term_Courses />
           ) : pageView === "courses2term" && role === "admin" ? (

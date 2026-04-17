@@ -9,7 +9,7 @@ import Table from "./Table";
 import Form_Edit from "./Form-Edit";
 
 
-function Teacher_Portal({ teacherID }) {
+function Teacher_Portal({ teacherID, edit }) {
     const [courseTime, setCourseTime] = useState("Present");
     const [courseArray, setCourseArray] = useState([]);
     const [courseSelected, setCourseSelected] = useState([]);
@@ -304,49 +304,52 @@ function Teacher_Portal({ teacherID }) {
                     )}
                 </div>
             </div>
-            <div className="App-Table-Many">
-                <div className="Table">
-                    <h1>
-                        {courseSelected.length === 0 ? "No Course Selected" : "Course Assignments"}
-                    </h1>
-                    {courseSelected.length === 0 ? (
-                        ""
-                    ) : (
-                        <>
-                            {assignmentSelected.length !== 0 ? (
-                                <>
-                                    <button 
-                                        onClick={() => {
-                                            setStudentsForModal(studentSelected);
-                                            modalRef.current.open()}}
+            {edit === "assignments" ? (
+                <div className="App-Table-Many">
+                    <div className="Table">
+                        <h1>
+                            {courseSelected.length === 0 ? "No Course Selected" : "Course Assignments"}
+                        </h1>
+                        {courseSelected.length === 0 ? (
+                            ""
+                        ) : (
+                            <>
+                                {assignmentSelected.length !== 0 ? (
+                                    <>
+                                        <button 
+                                            onClick={() => {
+                                                setStudentsForModal(studentSelected);
+                                                modalRef.current.open()}}
+                                            >
+                                            Add Assignment to Selected Student
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                setStudentsForModal(studentArray);
+                                                modalRef.current.open(studentArray)}}
                                         >
-                                        Add Assignment to Selected Student
-                                    </button>
-                                    <button
-                                        onClick={() => {
-                                            setStudentsForModal(studentArray);
-                                            modalRef.current.open(studentArray)}}
-                                    >
-                                        Add Assignment to All Students
-                                    </button>
-                                    <Popup_Date
-                                        ref={modalRef}
-                                        defaultValue={
-                                            new Date(
-                                                new Date(courseSelected[0].Terms.date_start).getTime() +
-                                                ((assignmentSelected[0].week_num - 1) * 7 + 5) * 24 * 60 * 60 * 1000
-                                            ).toISOString().split("T")[0]
-                                        }
-                                        onDateSelected={(d) => createGradeRows( studentsForModal, d )}
-                                    />
-                                </>
-                            ) : null }
-                            <Table columns={assignmentHeaders} data={assignmentArray} idField="assignment_id" onSelect={handleAssignmentSelect} />
-                            
-                        </>
-                    )}
+                                            Add Assignment to All Students
+                                        </button>
+                                        <Popup_Date
+                                            ref={modalRef}
+                                            defaultValue={
+                                                new Date(
+                                                    new Date(courseSelected[0].Terms.date_start).getTime() +
+                                                    ((assignmentSelected[0].week_num - 1) * 7 + 5) * 24 * 60 * 60 * 1000
+                                                ).toISOString().split("T")[0]
+                                            }
+                                            onDateSelected={(d) => createGradeRows( studentsForModal, d )}
+                                        />
+                                    </>
+                                ) : null }
+                                <Table columns={assignmentHeaders} data={assignmentArray} idField="assignment_id" onSelect={handleAssignmentSelect} />
+                                
+                            </>
+                        )}
+                    </div>
                 </div>
-            </div>
+            ) : null }
+
             <div className="App-Table-Many">
                 <div className="Table">
                     <h1>
@@ -362,15 +365,15 @@ function Teacher_Portal({ teacherID }) {
                 </div>
             </div>
 
-
-            <div className="App-Form-Outer">
-                {gradeSelected.length === 0 ? (
-                    <h1>No Grade Row Selected</h1>
-                ) : (
-                    <Form_Edit title="Edit Student" rawData={gradeSelected} idField="grade_id" onSave={handleGradeSave} />
-                )}
-            </div>
-
+            {edit === "grades" ? (
+                <div className="App-Form-Outer">
+                    {gradeSelected.length === 0 ? (
+                        <h1>No Grade Row Selected</h1>
+                    ) : (
+                        <Form_Edit title="Edit Student" rawData={gradeSelected} idField="grade_id" onSave={handleGradeSave} />
+                    )}
+                </div>
+            ) : null }
         </>
     );
 };
